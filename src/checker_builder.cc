@@ -48,7 +48,7 @@ namespace qvmove {
 		reps_ = reps;
 	}
 	Checker CheckerBuilder::build() {
-		Checker result = Checker(in_, out_, moves_, reps_);
+		Checker result(in_, out_, moves_, reps_);
 		return std::move(result);
 	}
 }
