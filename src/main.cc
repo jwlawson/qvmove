@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 	builder.input(ifile);
 	builder.output(ofile);
 
-	qvmove::Checker check = builder.build();
+	qvmove::Checker check(builder.build());
 
 	check.run();
 	return 0;

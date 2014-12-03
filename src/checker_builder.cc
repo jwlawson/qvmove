@@ -15,7 +15,7 @@ namespace qvmove {
 		out_(),
 		moves_(qvmove::consts::Moves), 
 		reps_(qvmove::consts::Reps) {}
-	CheckerBuilder& CheckerBuilder::input(const std::string& ifile) {
+	void CheckerBuilder::input(const std::string& ifile) {
 		if(ifile.empty()) {
 			in_ = IPtr(&std::cin, NullDeleter());
 		} else {
@@ -27,9 +27,8 @@ namespace qvmove {
 			}
 			in_ = IPtr(file);
 		}
-		return *this;
 	}
-	CheckerBuilder& CheckerBuilder::output(const std::string& ofile) {
+	void CheckerBuilder::output(const std::string& ofile) {
 		if(ofile.empty()) {
 			out_ = OPtr(&std::cout, NullDeleter());
 		} else {
@@ -41,18 +40,16 @@ namespace qvmove {
 			}
 			out_ = OPtr(file);
 		}
-		return *this;
 	}
-	CheckerBuilder& CheckerBuilder::moves(const _MoveVector& moves) {
+	void CheckerBuilder::moves(const _MoveVector& moves) {
 		moves_ = moves;
-		return *this;
 	}
-	CheckerBuilder& CheckerBuilder::reps(const _MatrixSet& reps) {
+	void CheckerBuilder::reps(const _MatrixSet& reps) {
 		reps_ = reps;
-		return *this;
 	}
-	Checker&& CheckerBuilder::build() {
-		return std::move(Checker(in_, out_, moves_, reps_));
+	Checker CheckerBuilder::build() {
+		Checker result = Checker(in_, out_, moves_, reps_);
+		return std::move(result);
 	}
 }
 
