@@ -24,7 +24,8 @@ void Checker::run() {
 			MatrixPtr next = loader_->next();
 			if(reps_.find(next) != reps_.end()) {
 				/* Is a class representative */
-				*output_ << loader_->depth() << " " << *init << std::endl;
+				*output_ << loader_->depth().moves_ << "("<<
+					loader_->depth().sinksource_<< "): " << *init << std::endl;
 				found = true;
 				break;
 			}
