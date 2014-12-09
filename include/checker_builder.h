@@ -14,6 +14,7 @@ class CheckerBuilder {
 		typedef std::shared_ptr<std::ostream> OPtr;
 		typedef std::vector<std::shared_ptr<cluster::MMIMove>> _MoveVector;
 		typedef std::unordered_set<std::shared_ptr<cluster::EquivQuiverMatrix>> _MatrixSet;
+		typedef std::unordered_set<std::shared_ptr<cluster::EquivUnderlyingGraph>> _GraphSet;
 	public:
 		CheckerBuilder();
 		/**
@@ -35,6 +36,7 @@ class CheckerBuilder {
 		 * By default this is set to be qvmove::consts::Reps.
 		 */
 		void reps(const _MatrixSet& reps);
+		void graphs(const _GraphSet& graphs);
 		/**
 		 * Generate the Checker
 		 */
@@ -44,6 +46,7 @@ class CheckerBuilder {
 		OPtr out_;
 		_MoveVector& moves_;
 		_MatrixSet& reps_;
+		_GraphSet& graphs_;
 
 		struct NullDeleter {
 			void operator()(const void *const) const {}

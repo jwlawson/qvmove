@@ -14,7 +14,8 @@ namespace qvmove {
 		in_(), 
 		out_(),
 		moves_(qvmove::consts::Moves), 
-		reps_(qvmove::consts::Reps) {}
+		reps_(qvmove::consts::Reps),
+		graphs_(qvmove::consts::Graphs) {}
 	void CheckerBuilder::input(const std::string& ifile) {
 		if(ifile.empty()) {
 			in_ = IPtr(&std::cin, NullDeleter());
@@ -47,8 +48,11 @@ namespace qvmove {
 	void CheckerBuilder::reps(const _MatrixSet& reps) {
 		reps_ = reps;
 	}
+	void CheckerBuilder::graphs(const _GraphSet& graphs) {
+		graphs_ = graphs;
+	}
 	Checker CheckerBuilder::build() {
-		Checker result(in_, out_, moves_, reps_);
+		Checker result(in_, out_, moves_, reps_, graphs_);
 		return std::move(result);
 	}
 }
