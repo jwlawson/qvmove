@@ -23,18 +23,13 @@ TEST_DIR = $(BASE_DIR)/test
 # define the output directory for .o
 OBJ_DIR = $(BASE_DIR)/build
 
-# define any directories containing header files other than /usr/include
-# -I/home/newhall/include
+# define any directories containing header files
 INCLUDES = -I$(HOME)/include -I$(BASE_DIR)/include -I$(BASE_DIR)/lib/include
 
-# define library paths in addition to /usr/lib
-#   if I wanted to include libraries not in /usr/lib I'd specify
-#   their path using -Lpath, something like: -L/home/newhall/lib
+# define library paths
 LFLAGS = -L$(HOME)/lib -L$(BASE_DIR)/lib
 
-# define any libraries to link into executable:
-#   if I want to link in libraries (libx.so or libx.a) I use the -llibname
-#   option, something like (this will link in libmylib.so and libm.so:
+# define any libraries to link into executable
 LIBS = -lqv
 
 SRCS = $(wildcard $(SRC_DIR)/*.cc)
@@ -43,12 +38,6 @@ _OBJS = $(SRCS:.cc=.o)
 OBJS = $(patsubst $(SRC_DIR)/%,$(OBJ_DIR)/%,$(_OBJS))
 
 MAIN = $(NAME)
-
-#
-# The following part of the makefile is generic; it can be used to
-# build any executable just by changing the definitions above and by
-# deleting dependencies appended to the file from 'make depend'
-#
 
 .PHONY: clean
 
@@ -66,10 +55,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cc
 $(OBJ_DIR)/%.o: $(TEST_DIR)/%.cc
 	$(CXX) $(CXXFLAGS) $(OPT) $(INCLUDES) -c $<  -o $@
 
+$(OBJS): | $(OBJ_DIR)
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
 clean:
 	$(RM) *.o *~ $(MAIN) $(OBJ_DIR)/*.o
-
-depend: $(SRCS)
-	makedepend $(INCLUDES) $^
-
-# DO NOT DELETE THIS LINE -- make depend needs it
+	
