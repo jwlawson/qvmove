@@ -24,7 +24,7 @@ TEST_DIR = $(BASE_DIR)/test
 OBJ_DIR = $(BASE_DIR)/build
 
 # define any directories containing header files
-INCLUDES = -I$(HOME)/include -I$(BASE_DIR)/include -I$(BASE_DIR)/lib/include
+INCLUDES = -I$(HOME)/include -I$(BASE_DIR)/include
 
 # define library paths
 LFLAGS = -L$(HOME)/lib -L$(BASE_DIR)/lib
@@ -32,34 +32,41 @@ LFLAGS = -L$(HOME)/lib -L$(BASE_DIR)/lib
 # define any libraries to link into executable
 LIBS = -lqv
 
-SRCS = $(wildcard $(SRC_DIR)/*.cc)
+MV_SRCS = $(SRC_DIR)/checker.cc \
+					$(SRC_DIR)/checker_builder.cc \
+					$(SRC_DIR)/consts.cc \
+					$(SRC_DIR)/main.cc
+_MV_OBJS = $(MV_SRCS:.cc=.o)
+MV_OBJS = $(patsubst $(SRC_DIR)/%,$(OBJ_DIR)/%,$(_MV_OBJS))
 
-_OBJS = $(SRCS:.cc=.o)
-OBJS = $(patsubst $(SRC_DIR)/%,$(OBJ_DIR)/%,$(_OBJS))
-
-MAIN = $(NAME)
+CL_SRCS = $(SRC_DIR)/consts.cc \
+					$(SRC_DIR)/qvmovecl.cc
+_CL_OBJS = $(CL_SRCS:.cc=.o)
+CL_OBJS = $(patsubst $(SRC_DIR)/%,$(OBJ_DIR)/%,$(_CL_OBJS))
 
 .PHONY: clean
 
-all:   $(MAIN)
+all: qvmove qvmovecl
 
-$(MAIN): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(B_OPT) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
+qvmove: $(MV_OBJS)
+	$(CXX) $(CXXFLAGS) $(B_OPT) $(INCLUDES) -o qvmove $(MV_OBJS) $(LFLAGS) $(LIBS)
 
-install:	$(MAIN)
-	cp $(MAIN) $(HOME)/bin/
+qvmovecl: $(CL_OBJS)
+	$(CXX) $(CXXFLAGS) $(B_OPT) $(INCLUDES) -o qvmovecl $(CL_OBJS) $(LFLAGS) $(LIBS)
+
+install: qvmove qvmovecl
+	cp qvmove $(HOME)/bin/
+	cp qvmovecl $(HOME)/bin/
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cc
-	$(CXX) $(CXXFLAGS) $(OPT) $(INCLUDES) -c $<  -o $@
+	$(CXX) $(CXXFLAGS) $(OPT) $(INCLUDES) -c $< -o $@
 
-$(OBJ_DIR)/%.o: $(TEST_DIR)/%.cc
-	$(CXX) $(CXXFLAGS) $(OPT) $(INCLUDES) -c $<  -o $@
-
-$(OBJS): | $(OBJ_DIR)
+$(MV_OBJS): | $(OBJ_DIR)
+$(CL_OBJS): | $(OBJ_DIR)
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
 clean:
-	$(RM) *.o *~ $(MAIN) $(OBJ_DIR)/*.o
-	
+	$(RM) *~ qvmove qvmovecl $(OBJ_DIR)/*.o
+

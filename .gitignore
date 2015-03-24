@@ -5,6 +5,7 @@ build/
 *~
 *#
 qvmove
+qvmovecl
 *.orig
 lib/
 .ycm_extra_conf.pyc
