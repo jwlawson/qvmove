@@ -51,7 +51,7 @@ Run `make` to compile `qvmove` and `qvmovecl`.
 `qvmove` requires the following libraries and their headers to be
 installed and accessible by the compiler:
 
- * [libqv][libqv site]
+ * [libqv][libqv]
 
 The Makefile can be modified to include the install locations of these
 libraries, by changing the `INCLUDES` and `LFLAGS` variables.
